@@ -20,6 +20,7 @@
     in
     {
       packages = forAllSystems (pkgs: import ./default.nix { inherit pkgs; });
+      overlays.default = final: prev: import ./default.nix { pkgs = final; };
 
       devShells = forAllSystems (pkgs: {
         default = pkgs.mkShell {
