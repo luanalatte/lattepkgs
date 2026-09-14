@@ -22,27 +22,17 @@ php.buildComposerProject2 (finalAttrs: {
   composerLock = ./composer.lock;
   vendorHash = "sha256-aQ4+eIxIp484Bkv67cO9h2Hr8kgLsNpWCissM29MQg8=";
 
-  # Adding node, pnpm and composer to path
+  # Adding php, composer, node and pnpm to path
   postInstall = ''
     wrapProgram $out/bin/laravel \
       --suffix PATH : ${
         lib.makeBinPath [
+          php
           php.packages.composer
           nodejs
           pnpm
         ]
       }
-  '';
-
-  # Default to pnpm, and prompt for Boost.
-  postPatch = ''
-    substituteInPlace src/NewCommand.php \
-    --replace-fail \
-      "\$input->setOption('npm', true);" \
-      "\$input->setOption('pnpm', true);" \
-    --replace-fail \
-      "\$input->setOption('boost', true);" \
-      "\$input->setOption('boost', false);"
   '';
 
   passthru.updateScript = ./update.sh;
